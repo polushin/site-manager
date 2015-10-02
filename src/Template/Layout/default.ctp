@@ -37,21 +37,21 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row" ng-class="{hidden: typeOfCurrentSite()=='empty'}">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <h1>Site {{currentSite.id}}</h1>
+                            <h1>{{getCurrentSiteTitle()}}</h1>
                         </div>
                         <div class="panel-body">
                             <div class="form-group">
                                 <label for="comment">Content:</label>
-                                <textarea ng-model="currentContent" class="form-control" rows="10" id="comment">{{currentSite.content}}</textarea>
+                                <textarea ng-model="currentContent" class="form-control" rows="10" id="comment"></textarea>
                             </div>
                         </div>
                     </div>
                     <button type="button" class="btn btn-success" ng-click="saveSite()">Save</button>
-                    <button type="button" class="btn btn-danger" ng-if="!isNewSite()" ng-click="deleteSite()">Delete</button>
+                    <button type="button" class="btn btn-danger" ng-if="typeOfCurrentSite() == 'regular'" ng-click="deleteSite()">Delete</button>
                 </div>
             </div>
         </div>

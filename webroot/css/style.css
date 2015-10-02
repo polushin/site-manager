@@ -1,3 +1,8 @@
 .active{
-    background-color: grey;
+    background-color: #ddd;
+}
+
+#sidebar-wrapper {
+    border-right: 1px solid #ddd;
+    overflow: hidden;
 }

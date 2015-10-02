@@ -4,28 +4,55 @@ var myApp = angular.module('myApp', []);
 myApp.controller('myAppCtrl', ['$scope','$rootScope', 'SiteManager', function($scope, $rootScope, SiteManager){
     SiteManager.loadSites();
 
-    $scope.sites = SiteManager.getSites();
-    $scope.currentContent = '';
-
     $scope.setActiveSite = function(site){
-        $scope.currentSite = site;
-        $scope.currentContent = site.content;
+        console.log('dfgdfgdfg');
+        if ((typeof site == 'object') && (site != null)) {
+            $scope.currentContent = site.content;
+            $scope.currentSite = site;
+            return;
+        }
+
+        $scope.currentSite = SiteManager.getInitialSite();
+        $scope.currentContent = $scope.currentSite.content;
     };
 
+    $scope.typeOfCurrentSite = function(){
+        if ((typeof $scope.currentSite == 'object') && ($scope.currentSite != null)){
+            if ($scope.currentSite.id == 0) {
+                return 'new';
+            } else {
+                return 'regular';
+            }
+        }
+        return 'empty';
+    };
+
+    $scope.getCurrentSiteTitle = function(){
+        var currentSiteType = $scope.typeOfCurrentSite();
+        switch (currentSiteType) {
+            case 'regular':
+                return 'Site ' + $scope.currentSite.id;
+            case 'new':
+                return 'Add New Site';
+            default:
+                return '';
+        }
+    };
+
+    $scope.setActiveSite(null);
+
     $scope.newSite = function(){
-        $scope.setActiveSite({id:0, content:"<!--html code-->"});
+        $scope.setActiveSite(null);
     };
 
     $scope.saveSite = function(){
         SiteManager.saveSite($scope.currentSite, $scope.currentContent);
     };
 
-    $scope.isNewSite = function(){
-        if ((typeof $scope.currentSite == 'object') && ($scope.currentSite.id == 0)) {
-            return true;
-        }
-        return false;
+    $scope.deleteSite = function(){
+        SiteManager.deleteSite($scope.currentSite);
     };
+
 
     $rootScope.$on('sitesLoadedEvent', function(event, args) {
         $scope.sites = SiteManager.getSites();
@@ -33,18 +60,26 @@ myApp.controller('myAppCtrl', ['$scope','$rootScope', 'SiteManager', function($s
             $scope.setActiveSite($scope.sites[0]);
         }
     });
+
+    $rootScope.$on('newSiteEvent', function(event, args) {
+        $scope.setActiveSite(args);
+    });
+
+    $rootScope.$on('siteDeletedEvent', function(event, args) {
+        $scope.setActiveSite(args);
+    });
 }]);
 
 myApp.factory('SiteManager', ['$http', '$rootScope', function ($http, $rootScope) {
     var sites = [];
 
-    var update = function(site){
-        for(var i=0; i< sites.length; i++){
-            if (sites[i].id == site.id){
-                sites[i] = site;
-                break;
+    var getSiteIndex = function(site){
+        for(var i=0; i<sites.length; i++){
+            if(sites[i].id == site.id) {
+                return i;
             }
         }
+        return null;
     };
 
     var edit = function (site, content){
@@ -59,7 +94,7 @@ myApp.factory('SiteManager', ['$http', '$rootScope', function ($http, $rootScope
             data: {content: content}
         }).then(function successCallback(response) {
             site.content = content;
-            update(site);
+            alert('Site Saved');
         }, function errorCallback(response) {
             alert('Server Error');
         });
@@ -76,7 +111,10 @@ myApp.factory('SiteManager', ['$http', '$rootScope', function ($http, $rootScope
             },
             data: {content: content}
         }).then(function successCallback(response) {
-            sites.push(response.data.site);
+            var newSite = response.data.site;
+            sites.push(newSite);
+            alert('New Site Added [Site '+newSite.id+']');
+            $rootScope.$emit('newSiteEvent', response.data.site);
         }, function errorCallback(response) {
             alert('Server Error');
         });
@@ -110,6 +148,37 @@ myApp.factory('SiteManager', ['$http', '$rootScope', function ($http, $rootScope
             } else {
                 add(site, content);
             }
+        },
+
+        deleteSite: function(site){
+            $http({
+                method: 'POST',
+                url: '/sites/delete.json/'+site.id,
+                headers: {
+                    'Accept': 'application/json, text/javascript, */*; q=0.01',
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }).then(function successCallback(response) {
+                var ind = getSiteIndex(site);
+                sites.splice(ind, 1);
+                if (ind < sites.length) {
+                    $rootScope.$emit('siteDeletedEvent', sites[ind]);
+                } else if(sites.length > 0) {
+                    $rootScope.$emit('siteDeletedEvent', sites[sites.length-1]);
+                } else {
+                    $rootScope.$emit('siteDeletedEvent', null);
+                }
+            }, function errorCallback(response) {
+                alert('Server Error');
+            });
+        },
+
+        getInitialSite: function(){
+            return {
+                id: 0,
+                content: "<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"utf-8\">\n</head>\n<body>\n</body>\n</html>"
+            };
         }
     }
 }]);

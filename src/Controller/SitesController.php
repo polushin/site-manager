@@ -21,7 +21,6 @@ class SitesController extends AppController
         $site = $this->Sites->get($id);
 
         $this->set(['status' => false]);
-
         if ($this->request->is(['post', 'put'])) {
             $site = $this->Sites->patchEntity($site,
                 $this->request->input('json_decode', true)
