@@ -10,7 +10,7 @@ Simple site manager. One page application, Rest Api. Frontend AngularJs, backend
 
 #Example virtual hosts
 <VirtualHost *:80>
-    ServerName site-manager.lch
+    ServerName site-manager.lch<br/>
     ServerAlias site-manager.lch
     DocumentRoot /mnt/work/hosts/site-manager/webroot
     <Directory "/mnt/work/hosts/site-manager/webroot">
