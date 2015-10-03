@@ -1,2 +1,2 @@
 # site-manager
-Test task.
+Simple site manager. One page application. Frontend AngularJs, backend - cakephp-3.
