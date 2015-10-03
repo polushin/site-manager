@@ -1,5 +1,7 @@
 # site-manager
-Simple site manager. One page application, Rest Api. Frontend AngularJs, backend - cakephp-3.
+Simple site manager.<br/> 
+One page application, Rest Api. <br/>
+Frontend AngularJs, backend - cakephp-3.
 
 #Installation
 1. Clone this project, or download zip file. Ex: git clone https://github.com/polushin/site-manager.git
