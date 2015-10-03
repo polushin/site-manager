@@ -6,7 +6,8 @@ Simple site manager. One page application, Rest Api. Frontend AngularJs, backend
 2. Install CakePhp using composer: php composer.pchar install
 3. Create local config file config/app_local.php like config/app_local.sample.php and setup your database parameters
 4. Init database and create sites folder. Run bin/cake migrations migrate. (file bin/cake must be executable). After this step /sites folder must be created with 777 permitions and sites table in database.
-5. Configure two virtualhosts. For site-manager application and for sites. Document root for sitemanager must be to webroot and for sites to sites folders.
+5. Configure two virtualhosts. For site-manager application and for sites. Document root for site-manager must be to webroot and for sites to sites folders. Sites will be available in http://your-sites-server-name/siteID (ID - identificator of the site).
+
 
 #Example virtual hosts
 <VirtualHost *:80>
