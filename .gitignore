@@ -2,5 +2,6 @@
 /config/app.php
 /tmp/*
 /logs/*
+/sites/*
 /.idea/*
 /config/app_local.php

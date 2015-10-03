@@ -1,62 +1,59 @@
+<?php
+/**
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
+ * @since         0.10.0
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
+
+$cakeDescription = 'CakePHP: the rapid development php framework';
+?>
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <meta charset="utf-8">
-    <title>Simple Site Manager</title>
+    <?= $this->Html->charset() ?>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <?= $cakeDescription ?>:
+        <?= $this->fetch('title') ?>
+    </title>
+    <?= $this->Html->meta('icon') ?>
 
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/simple-sidebar.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+    <?= $this->Html->css('base.css') ?>
+    <?= $this->Html->css('cake.css') ?>
 
-    <script src="lib/angular/angular.min.js"></script>
-    <script src="lib/angular/angular-route.min.js"></script>
-
-    <script src="js/myApp.js"></script>
-
+    <?= $this->fetch('meta') ?>
+    <?= $this->fetch('css') ?>
+    <?= $this->fetch('script') ?>
 </head>
+<body>
+    <header>
+        <div class="header-title">
+            <span><?= $this->fetch('title') ?></span>
+        </div>
+        <div class="header-help">
+            <span><a target="_blank" href="http://book.cakephp.org/3.0/">Documentation</a></span>
+            <span><a target="_blank" href="http://api.cakephp.org/3.0/">API</a></span>
+        </div>
+    </header>
+    <div id="container">
 
-<body ng-app="myApp" ng-controller="myAppCtrl">
+        <div id="content">
+            <?= $this->Flash->render() ?>
 
-
-<div id="wrapper">
-    <div id="sidebar-wrapper">
-        <ul class="sidebar-nav">
-            <li ng-class="{active: currentSite.id==site.id}" ng-repeat="site in sites">
-                <a ng-click="setActiveSite(site)" href="#">Site{{site.id}}</a>
-            </li>
-        </ul>
-
-    </div>
-
-    <div id="page-content-wrapper">
-        <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-12">
-                    <button type="button" class="btn btn-default" ng-click="newSite()">New Site</button>
-                </div>
-            </div>
-
-            <div class="row" ng-class="{hidden: typeOfCurrentSite()=='empty'}">
-                <div class="col-lg-12">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <h1>{{getCurrentSiteTitle()}}</h1>
-                        </div>
-                        <div class="panel-body">
-                            <div class="form-group">
-                                <label for="comment">Content:</label>
-                                <textarea ng-model="currentContent" class="form-control" rows="10" id="comment"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="button" class="btn btn-success" ng-click="saveSite()">Save</button>
-                    <button type="button" class="btn btn-danger" ng-if="typeOfCurrentSite() == 'regular'" ng-click="deleteSite()">Delete</button>
-                </div>
+                <?= $this->fetch('content') ?>
             </div>
         </div>
+        <footer>
+        </footer>
     </div>
-</div>
-
 </body>
 </html>

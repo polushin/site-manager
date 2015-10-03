@@ -5,7 +5,6 @@ myApp.controller('myAppCtrl', ['$scope','$rootScope', 'SiteManager', function($s
     SiteManager.loadSites();
 
     $scope.setActiveSite = function(site){
-        console.log('dfgdfgdfg');
         if ((typeof site == 'object') && (site != null)) {
             $scope.currentContent = site.content;
             $scope.currentSite = site;
@@ -82,59 +81,43 @@ myApp.factory('SiteManager', ['$http', '$rootScope', function ($http, $rootScope
         return null;
     };
 
-    var edit = function (site, content){
+    var httpRequest = function(url, data, success){
         $http({
             method: 'POST',
-            url: '/sites/edit.json/'+site.id,
+            url: url,
             headers: {
                 'Accept': 'application/json, text/javascript, */*; q=0.01',
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
                 'X-Requested-With': 'XMLHttpRequest'
             },
-            data: {content: content}
-        }).then(function successCallback(response) {
+            data: data
+        }).then(success, function errorCallback(response) {
+            alert('Server Error');
+        });
+
+    };
+
+    var edit = function (site, content){
+        httpRequest('/sites/edit.json/'+site.id, {content: content}, function(response){
             site.content = content;
             alert('Site Saved');
-        }, function errorCallback(response) {
-            alert('Server Error');
         });
     };
 
     var add = function (site, content){
-        $http({
-            method: 'POST',
-            url: '/sites/add.json',
-            headers: {
-                'Accept': 'application/json, text/javascript, */*; q=0.01',
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            data: {content: content}
-        }).then(function successCallback(response) {
+        httpRequest('/sites/add.json', {content: content}, function(response){
             var newSite = response.data.site;
             sites.push(newSite);
             alert('New Site Added [Site '+newSite.id+']');
-            $rootScope.$emit('newSiteEvent', response.data.site);
-        }, function errorCallback(response) {
-            alert('Server Error');
+            $rootScope.$emit('newSiteEvent', newSite);
         });
     };
 
     return {
         loadSites: function(){
-            $http({
-                method: 'POST',
-                url: '/sites/index.json',
-                headers: {
-                    'Accept': 'application/json, text/javascript, */*; q=0.01',
-                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            }).then(function successCallback(response) {
+            httpRequest('/sites/index.json', {}, function(response){
                 sites = response.data.sites;
                 $rootScope.$emit('sitesLoadedEvent', '');
-            }, function errorCallback(response) {
-                alert('Server Error');
             });
         },
 
@@ -151,15 +134,7 @@ myApp.factory('SiteManager', ['$http', '$rootScope', function ($http, $rootScope
         },
 
         deleteSite: function(site){
-            $http({
-                method: 'POST',
-                url: '/sites/delete.json/'+site.id,
-                headers: {
-                    'Accept': 'application/json, text/javascript, */*; q=0.01',
-                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            }).then(function successCallback(response) {
+            httpRequest('/sites/delete.json/'+site.id, {}, function(response){
                 var ind = getSiteIndex(site);
                 sites.splice(ind, 1);
                 if (ind < sites.length) {
@@ -169,15 +144,13 @@ myApp.factory('SiteManager', ['$http', '$rootScope', function ($http, $rootScope
                 } else {
                     $rootScope.$emit('siteDeletedEvent', null);
                 }
-            }, function errorCallback(response) {
-                alert('Server Error');
             });
         },
 
         getInitialSite: function(){
             return {
                 id: 0,
-                content: "<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"utf-8\">\n</head>\n<body>\n</body>\n</html>"
+                content: "<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"utf-8\">\n</head>\n<body>\n<h1>Hellow world</h1>\n</body>\n</html>"
             };
         }
     }
