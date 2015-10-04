@@ -12,7 +12,7 @@ Frontend AngularJs, backend - cakephp-3.
 
 
 #Example virtual hosts
-\<VirtualHost *:80\>
+\<VirtualHost *:80\><br/>
     ServerName site-manager.lch<br/>
     ServerAlias site-manager.lch<br/>
     DocumentRoot /mnt/work/hosts/site-manager/webroot<br/>
@@ -26,7 +26,7 @@ Frontend AngularJs, backend - cakephp-3.
     \</Directory\><br/>
 \</VirtualHost\><br/>
 
-\<VirtualHost *:80\><br/>
+\<VirtualHost *:80\><br/><br/>
     ServerName site-manager-sites.lch<br/>
     ServerAlias site-manager-sites.lch<br/>
     DocumentRoot /mnt/work/hosts/site-manager/sites<br/>
