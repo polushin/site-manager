@@ -12,30 +12,30 @@ Frontend AngularJs, backend - cakephp-3.
 
 
 #Example virtual hosts
-<VirtualHost *:80>
+\<VirtualHost *:80\>
     ServerName site-manager.lch<br/>
     ServerAlias site-manager.lch<br/>
     DocumentRoot /mnt/work/hosts/site-manager/webroot<br/>
-    <Directory "/mnt/work/hosts/site-manager/webroot"><br/>
+    \<Directory "/mnt/work/hosts/site-manager/webroot"\><br/>
         Options -Indexes +FollowSymLinks +MultiViews<br/>
         Require local<br/>
         AllowOverride All<br/>
         Order allow,deny<br/>
         allow from all<br/>
         Require all granted<br/>
-    </Directory><br/>
-</VirtualHost><br/>
+    \</Directory\><br/>
+\</VirtualHost\><br/>
 
-<VirtualHost *:80><br/>
+\<VirtualHost *:80\><br/>
     ServerName site-manager-sites.lch<br/>
     ServerAlias site-manager-sites.lch<br/>
     DocumentRoot /mnt/work/hosts/site-manager/sites<br/>
-    <Directory "/mnt/work/hosts/site-manager/sites"><br/>
+    \<Directory "/mnt/work/hosts/site-manager/sites"\><br/>
         Options -Indexes +FollowSymLinks +MultiViews<br/>
         Require local<br/>
         AllowOverride All<br/>
         Order allow,deny<br/>
         allow from all<br/>
         Require all granted<br/>
-    </Directory><br/>
-</VirtualHost><br/>
+    \</Directory\><br/>
+\</VirtualHost\><br/>
